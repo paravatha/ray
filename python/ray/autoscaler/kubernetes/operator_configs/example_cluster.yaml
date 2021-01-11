@@ -25,6 +25,8 @@ spec:
       metadata:
         # Automatically generates a name for the pod with this prefix.
         generateName: example-cluster-ray-head-
+        labels:
+          component: ray-head 
       spec:
         restartPolicy: Never
 
