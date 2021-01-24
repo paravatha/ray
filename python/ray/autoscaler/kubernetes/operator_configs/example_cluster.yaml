@@ -19,6 +19,10 @@ spec:
   # Specify the allowed pod types for this ray cluster and the resources they provide.
   podTypes:
   - name: head-node
+    setupCommands: 
+      - python -m pip install --upgrade pip
+      - conda install jupyter
+      - conda install -c anaconda ipykernel
     podConfig:
       apiVersion: v1
       kind: Pod
@@ -47,6 +51,7 @@ spec:
           args: ['trap : TERM INT; sleep infinity & wait;']
           ports:
           - containerPort: 6379 # Redis port.
+          - containerPort: 8888 # jupyter port.
           - containerPort: 12345 # Ray internal communication.
           - containerPort: 12346 # Ray internal communication.
 
