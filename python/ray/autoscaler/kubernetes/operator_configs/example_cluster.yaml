@@ -19,10 +19,6 @@ spec:
   # Specify the allowed pod types for this ray cluster and the resources they provide.
   podTypes:
   - name: head-node
-    setupCommands: 
-      - python -m pip install --upgrade pip
-      - conda install jupyter
-      - conda install -c anaconda ipykernel
     podConfig:
       apiVersion: v1
       kind: Pod
@@ -42,6 +38,12 @@ spec:
           emptyDir:
             medium: Memory
         containers:
+        - name: minimal-notebook
+          image: jupyter/minimal-notebook:latest
+          ports:
+          - containerPort: 8888
+          command: ["start-notebook.sh"]
+          args: ["--NotebookApp.token=''"]        
         - name: ray-node
           imagePullPolicy: Always
           image: rayproject/ray:4e01a9
@@ -51,7 +53,6 @@ spec:
           args: ['trap : TERM INT; sleep infinity & wait;']
           ports:
           - containerPort: 6379 # Redis port.
-          - containerPort: 8888 # jupyter port.
           - containerPort: 12345 # Ray internal communication.
           - containerPort: 12346 # Ray internal communication.
 
