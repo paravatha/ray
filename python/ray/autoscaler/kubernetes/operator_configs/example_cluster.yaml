@@ -44,6 +44,22 @@ spec:
           - containerPort: 8888
           command: ["start-notebook.sh"]
           args: ["--NotebookApp.token=''"]        
+          volumeMounts:
+          - mountPath: /dev/shm
+            name: dshm
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              # The maximum memory that this pod is allowed to use. The
+              # limit will be detected by ray and split to use 10% for
+              # redis, 30% for the shared memory object store, and the
+              # rest for application memory. If this limit is not set and
+              # the object store size is not set manually, ray will
+              # allocate a very large object store in each pod that may
+              # cause problems for other pods.
+              memory: 512Mi        
         - name: ray-node
           imagePullPolicy: Always
           image: rayproject/ray:4e01a9
@@ -64,7 +80,7 @@ spec:
             name: dshm
           resources:
             requests:
-              cpu: 1000m
+              cpu: 500m
               memory: 512Mi
             limits:
               # The maximum memory that this pod is allowed to use. The
@@ -77,7 +93,7 @@ spec:
               memory: 512Mi
   - name: worker-nodes
     # Minimum number of Ray workers of this Pod type.
-    minWorkers: 2
+    minWorkers: 1
     # Maximum number of Ray workers of this Pod type. Takes precedence over minWorkers.
     maxWorkers: 3
     # User-specified custom resources for use by Ray 
