@@ -38,7 +38,7 @@ spec:
         containers:
         - name: ray-node
           imagePullPolicy: Always
-          image: rayproject/ray:4e01a9
+          image: rayproject/ray:nightly
           # Do not change this command - it keeps the pod alive until it is
           # explicitly killed.
           command: ["/bin/bash", "-c", "--"]
@@ -71,7 +71,7 @@ spec:
     # Minimum number of Ray workers of this Pod type.
     minWorkers: 2
     # Maximum number of Ray workers of this Pod type. Takes precedence over minWorkers.
-    maxWorkers: 3
+    maxWorkers: 2 
     # User-specified custom resources for use by Ray 
     rayResources: {"Custom1": 1, "is_spot": 1}
     # Optional commands to run before starting the Ray runtime.
@@ -92,7 +92,7 @@ spec:
         containers:
         - name: ray-node
           imagePullPolicy: Always
-          image: rayproject/ray:4e01a9
+          image: rayproject/ray:nightly
           command: ["/bin/bash", "-c", "--"]
           args: ["trap : TERM INT; sleep infinity & wait;"]
           ports:
