@@ -91,7 +91,9 @@ class Policy(metaclass=ABCMeta):
         if not hasattr(self, "view_requirements"):
             self.view_requirements = view_reqs
         else:
-            self.view_requirements.update(view_reqs)
+            for k, v in view_reqs.items():
+                if k not in self.view_requirements:
+                    self.view_requirements[k] = v
         self._model_init_state_automatically_added = False
 
     @abstractmethod
@@ -546,7 +548,8 @@ class Policy(metaclass=ABCMeta):
             model=getattr(self, "model", None),
             num_workers=self.config.get("num_workers", 0),
             worker_index=self.config.get("worker_index", 0),
-            framework=getattr(self, "framework", "tf"))
+            framework=getattr(self, "framework",
+                              self.config.get("framework", "tf")))
         return exploration
 
     def _get_default_view_requirements(self):
@@ -706,7 +709,8 @@ class Policy(metaclass=ABCMeta):
         ret = {}
         for view_col, view_req in self.view_requirements.items():
             if isinstance(view_req.space, (gym.spaces.Dict, gym.spaces.Tuple)):
-                _, shape = ModelCatalog.get_action_shape(view_req.space)
+                _, shape = ModelCatalog.get_action_shape(
+                    view_req.space, framework=self.config["framework"])
                 ret[view_col] = \
                     np.zeros((batch_size, ) + shape[1:], np.float32)
             else:
