@@ -1,7 +1,7 @@
 apiVersion: cluster.ray.io/v1
 kind: RayCluster
 metadata:
-  name: prasad-ml-cluster
+  name: my-ml-cluster
 spec:
   # The maximum number of workers nodes to launch in addition to the head node.
   maxWorkers: 3
@@ -22,9 +22,9 @@ spec:
       kind: Pod
       metadata:
         # Automatically generates a name for the pod with this prefix.
-        generateName: prasad-ml-cluster-ray-head-
+        generateName: my-ml-cluster-ray-head-
         labels:
-          component: prasad-ml-cluster-ray-head
+          component: my-ml-cluster-ray-head
       spec:
         restartPolicy: Never
 
@@ -80,7 +80,7 @@ spec:
       kind: Pod
       metadata:
         # Automatically generates a name for the pod with this prefix.
-        generateName: prasad-ml-cluster-ray-worker-
+        generateName: my-ml-cluster-ray-worker-
       spec:
         restartPolicy: Never
         volumes:

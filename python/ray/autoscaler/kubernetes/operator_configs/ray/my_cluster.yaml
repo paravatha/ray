@@ -1,7 +1,7 @@
 apiVersion: cluster.ray.io/v1
 kind: RayCluster
 metadata:
-  name: prasad-cluster
+  name: my-cluster
 spec:
   # The maximum number of workers nodes to launch in addition to the head node.
   maxWorkers: 3
@@ -22,9 +22,9 @@ spec:
       kind: Pod
       metadata:
         # Automatically generates a name for the pod with this prefix.
-        generateName: prasad-cluster-ray-head-
+        generateName: my-cluster-ray-head-
         labels:
-          component: prasad-cluster-ray-head
+          component: my-cluster-ray-head
       spec:
         restartPolicy: Never
 
@@ -66,7 +66,8 @@ spec:
               # the object store size is not set manually, ray will
               # allocate a very large object store in each pod that may
               # cause problems for other pods.
-              memory: 512Mi
+              cpu: 1500m
+              memory: 1024Mi
   - name: worker-node
     # Minimum number of Ray workers of this Pod type.
     minWorkers: 2
@@ -80,7 +81,7 @@ spec:
       kind: Pod
       metadata:
         # Automatically generates a name for the pod with this prefix.
-        generateName: prasad-cluster-ray-worker-
+        generateName: my-cluster-ray-worker-
       spec:
         restartPolicy: Never
         volumes:
