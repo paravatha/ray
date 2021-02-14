@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ray
+  name: ray-dashboard-service
+spec:
+  selector:
+    component: prasad-cluster-ray-head
+  ports:
+    - name: dashboard
+      port: 80
+      targetPort: 8265
+  type: LoadBalancer 
